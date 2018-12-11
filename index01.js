@@ -136,6 +136,8 @@ let data = [
   { date: '2018-10-30', value: 6400 },
 ];
 
+console.log('length', data.length);
+
 let x = d3.scaleTime()
   .domain(d3.extent(data, d => new Date(d.date)))
   .range([margin.left, width - margin.right]);
@@ -146,7 +148,7 @@ let y = d3.scaleLinear()
 
 let xAxis = g => g
   .attr("transform", `translate(0,${height - margin.bottom})`)
-  .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0));
+  .call(d3.axisBottom(x).ticks(30).tickSizeOuter(30));
 
 let yAxis = g => g
   .attr("transform", `translate(${margin.left},0)`)
@@ -200,7 +202,6 @@ const circles = svg.selectAll('circle')
   .attr('stroke-width', '1')
   .attr('cursor', 'pointer')
   .on("mouseover",function(d){
-    let self = this;
     d3.select(this)
       .transition()
       .duration(200)
@@ -213,7 +214,7 @@ const circles = svg.selectAll('circle')
       .attr("y",function(){
         return y(d.value) - 20;
       })
-      .text(`今天李月走了${d.value}步`)
+      .text(`${d.date},李月走了${d.value}步`)
       .attr("text-anchor","middle")
       .attr("fill", 'steelblue');
   })

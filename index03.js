@@ -157,7 +157,7 @@ let xAxis = g => g
   .call(d3.axisBottom(x)
     .ticks(width / 80)
     .tickSizeOuter(0)
-    .tickFormat(d3.timeFormat('%Y-%m-%d'))
+    .tickFormat(d3.timeFormat('%Y年%m月%d日'))
   )
   .call(g => g.selectAll('.tick text')
     .attr('y', 10)
