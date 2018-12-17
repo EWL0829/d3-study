@@ -24,25 +24,24 @@ const data = [
   { name: 'xuxiao', value: 18 },
 ];
 
-
 // 创建比例尺
 let x = d3.scaleBand().domain(data.map(d => d.name)).range([margin.left, width - margin.right]).padding(0.1);//padding表示的是序数比例吃内部间隔与外部间隔的设置数值，一般在[0, 1]
 let y = d3.scaleLinear()
   .domain([0, d3.max(data, d => d.value)]).nice()
   .range([height - margin.bottom, margin.top]);
 
+// 创建坐标系
 let xAxis = g => g.attr('transform', `translate(0, ${height - margin.bottom})`)
   .call(d3.axisBottom(x).tickSizeOuter(0))
   .call(g => g.selectAll('.tick text')
     .attr('y', 10)
     .attr('transform', 'rotate(10)')
   );
-
 let yAxis = g => g.attr('transform', `translate(${margin.left}, 0)`)
   .call(d3.axisLeft(y))
   .call(g => g.select('.domain').remove());
 
-
+// 创建切换函数
 const switchOrder = (order) => {
   switch (order) {
     case "name-ascending":
@@ -60,12 +59,13 @@ const switchOrder = (order) => {
   return order;
 };
 
+// 添加svg容器
 const svg = d3.select('body')
   .append('svg')
   .attr('width', width + 'px')
   .attr('height', height + 'px');
 
-
+// 添加柱状图分组
 const bar = svg.append("g")
   .attr("fill", "steelblue")
   .selectAll("rect")
@@ -77,14 +77,14 @@ const bar = svg.append("g")
   .attr("height", d => y(0) - y(d.value))
   .attr("width", x.bandwidth());
 
-
+// 为柱状图绑定坐标
 const gx = svg.append("g")
   .call(xAxis);
-
 const gy = svg.append("g")
   .call(yAxis);
 
-update = () => {
+// 创建更新函数
+const update = () => {
   const t = svg.transition()
     .duration(750);
 
@@ -100,13 +100,13 @@ update = () => {
     .delay((d, i) => i * 20);
 };
 
+// 初始化，调用一次以名字区分的函数
 window.onload = () => {
   switchOrder('name-ascending');
 };
-
+// 选中页面的select，设置切换事件
 let orderSelect = document.getElementById('orderSelect');
 orderSelect.addEventListener('change', (e) => {
-  console.log('e', e.target.value);
   switchOrder(e.target.value);
 });
 
